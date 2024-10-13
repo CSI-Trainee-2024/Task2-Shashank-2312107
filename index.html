@@ -4,28 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Tracker</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 2rem;
+            background-color: blueviolet;
+            color: white;
+        }
+
+        .head_container {
+            background-color: orange;
+            padding: 1rem;
+            font-size: xx-large;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 20px;
+            box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .workout_form {
+            background-color: orange;
+            margin: 2rem 0;
+            padding: 1rem;
+            border-radius: 20px;
+            box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .text_input {
+            padding: 8px;
+            border: 1px solid black;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: black;
+            width: 100%; /* Default to full width */
+            max-width: 300px; /* Limit width for larger screens */
+            margin: 0 10px;
+            flex: 1; /* Allow to grow and shrink */
+        }
+
+        .time_form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .time_input {
+            padding: 8px;
+            border: 1px solid black;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: black;
+            margin-right: 10px;
+            flex: 1; /* Allow to grow and shrink */
+            max-width: 150px; /* Limit width for larger screens */
+        }
+
+        .button {
+            background-color: aquamarine;
+            border: 2px solid black;
+            border-radius: 10px;
+            color: black;
+            padding: 10px 20px;
+            font-size: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+            margin-left: 10px; /* Space between button and input */
+        }
+
+        .button:hover {
+            background-color: white;
+            color: #04AA6D;
+        }
+
+        .end_work {
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center; /* Center the end workout button */
+        }
+
+        @media screen and (max-width: 600px) {
+            .workout_form {
+                flex-direction: column; /* Stack elements vertically */
+                align-items: stretch;
+            }
+
+            .text_input, .time_input, .button {
+                width: 100%; /* Full width on small screens */
+                margin: 10px 0; /* Add space between inputs */
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="box1">
-           <p>Track Your Reps & Time Efficiency</p>
-           <button id="begin-btn">Begin Workout</button>
-        </div>
-        <div id="exercise-container"></div>
-        <div class="box2">
-            <input type="text" id="exercise" placeholder="Add Your Exercise">
-            <input type="time" id="timeInput" step="1" placeholder="Specific Time Limit">
-            <button id="plan-btn">Add to Workout Plan</button>
-            <ul id="workout"></ul>
-            <div class="end-work">
-                <button id="show-end" onclick="endWorkout()">End Workout</button>
-            </div>
-        </div>
+
+    <!-- Heading template -->
+    <div class="head_container">
+        <p class="heading">Track Your Reps & Time Efficiency</p>
+        <button id="begin-btn" class="button">Begin Workout</button>
     </div>
 
-    <script src="index.js">
-       
-    </script>
+    <!-- Workout form Input template -->
+    <form class="workout_form" onsubmit="event.preventDefault(); add_workout();">
+        <input type="text" class="text_input" id="workout_text" placeholder="Workout Name" required />
+        <div class="time_form">
+            <input type="time" class="time_input" id="timeInput" step="1" required>
+            <button class="button">Add Workout</button>
+        </div>
+        <div class="end_work">
+            <button class="button" id="show_end" onclick="end_workout()">End Workout</button>
+        </div>
+        <ul id="workout" style="list-style-type: none; padding: 0;"></ul>
+    </form>
+
+    <script src="script.js"></script>
 </body>
 </html>
