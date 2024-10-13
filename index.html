@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task-2</title>
-   <link rel="stylesheet" href="style.css">
+    <title>Workout Tracker</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
@@ -12,11 +12,20 @@
            <p>Track Your Reps & Time Efficiency</p>
            <button id="begin-btn">Begin Workout</button>
         </div>
+        <div id="exercise-container"></div>
         <div class="box2">
-            <input type="number" id="exercise" placeholder="Add Your Exercise">
-            <input type="time" id="timeInput" name="timeInput" step="1" placeholder="Specific Time Limit">
+            <input type="text" id="exercise" placeholder="Add Your Exercise">
+            <input type="time" id="timeInput" step="1" placeholder="Specific Time Limit">
             <button id="plan-btn">Add to Workout Plan</button>
+            <ul id="workout"></ul>
+            <div class="end-work">
+                <button id="show-end" onclick="endWorkout()">End Workout</button>
+            </div>
         </div>
     </div>
+
+    <script src="index.js">
+       
+    </script>
 </body>
 </html>
