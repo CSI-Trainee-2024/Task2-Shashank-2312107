@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Tracker</title>
     <style>
-        * {
+     * {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             box-sizing: border-box;
         }
 
-        body {
+    body {
             margin: 0;
             padding: 2rem;
             background-color: blueviolet;
             color: white;
         }
 
-        .head_container {
+    .head_container {
             background-color: orange;
             padding: 1rem;
             font-size: xx-large;
@@ -25,52 +25,56 @@
             justify-content: space-between;
             align-items: center;
             border-radius: 20px;
-            box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 10px 15px  black;
         }
 
-        .workout_form {
+    .workout_form {
             background-color: orange;
             margin: 2rem 0;
             padding: 1rem;
             border-radius: 20px;
-            box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 10px 15px  black;
             display: flex;
-            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+            flex-wrap: wrap; 
             justify-content: space-between;
             align-items: center;
         }
 
-        .text_input {
+    .text_input {
             padding: 8px;
             border: 1px solid black;
             border-radius: 10px;
             font-size: 1rem;
             color: black;
-            width: 100%; /* Default to full width */
-            max-width: 300px; /* Limit width for larger screens */
+            width: 100%; 
+            max-width: 300px; 
             margin: 0 10px;
-            flex: 1; /* Allow to grow and shrink */
+            flex: 1; 
+        }
+        #begin-btn{
+            box-shadow: 8px 12px  black;
+
         }
 
-        .time_form {
+    .time_form {
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 10px 0;
         }
 
-        .time_input {
+    .time_input {
             padding: 8px;
             border: 1px solid black;
             border-radius: 10px;
             font-size: 1rem;
             color: black;
             margin-right: 10px;
-            flex: 1; /* Allow to grow and shrink */
-            max-width: 150px; /* Limit width for larger screens */
+            flex: 1; 
+            max-width: 150px; 
         }
 
-        .button {
+    .button {
             background-color: aquamarine;
             border: 2px solid black;
             border-radius: 10px;
@@ -79,10 +83,9 @@
             font-size: 15px;
             transition: 0.3s;
             cursor: pointer;
-            margin-left: 10px; /* Space between button and input */
+            margin-left: 10px;
         }
-
-        .button:hover {
+    .button:hover {
             background-color: white;
             color: #04AA6D;
         }
@@ -91,31 +94,27 @@
             margin-top: 20px;
             width: 100%;
             display: flex;
-            justify-content: center; /* Center the end workout button */
+            justify-content: center; 
         }
 
         @media screen and (max-width: 600px) {
             .workout_form {
-                flex-direction: column; /* Stack elements vertically */
+                flex-direction: column;
                 align-items: stretch;
             }
 
             .text_input, .time_input, .button {
-                width: 100%; /* Full width on small screens */
-                margin: 10px 0; /* Add space between inputs */
+                width: 100%; 
+                margin: 10px 0; 
             }
         }
     </style>
 </head>
 <body>
-
-    <!-- Heading template -->
     <div class="head_container">
         <p class="heading">Track Your Reps & Time Efficiency</p>
         <button id="begin-btn" class="button">Begin Workout</button>
     </div>
-
-    <!-- Workout form Input template -->
     <form class="workout_form" onsubmit="event.preventDefault(); add_workout();">
         <input type="text" class="text_input" id="workout_text" placeholder="Workout Name" required />
         <div class="time_form">
@@ -128,6 +127,126 @@
         <ul id="workout" style="list-style-type: none; padding: 0;"></ul>
     </form>
 
-    <script src="script.js"></script>
+    <script>let workouts = JSON.parse(localStorage.getItem("workout_list")) || [];
+        let is_timer_on = JSON.parse(localStorage.getItem("is_timer_on")) || false;
+        let timerInterval;
+        
+        function add_workout() {
+            const workout_text = document.getElementById("workout_text").value;
+            const timeInput = document.getElementById("timeInput").value;
+        
+     if (workout_text !== "" && timeInput !== "") {
+                const [hours, minutes, seconds] = timeInput.split(':').map(Number);
+                const totalSeconds = (hours || 0) * 3600 + (minutes || 0) * 60 + (seconds || 0);
+        
+     workouts.push({
+                    text: workout_text,
+                    seconds: totalSeconds.toString(),
+                    completed_seconds: "0"
+                });
+        
+                
+     workouts.push({
+                    text: 'Rest',
+                    seconds: '30',
+                    completed_seconds: "0"
+                });
+        
+      localStorage.setItem("workout_list", JSON.stringify(workouts));
+                list_workouts();
+            }
+        }
+        
+     function delete_workout(index) {
+            workouts.splice(index, 1);
+            localStorage.setItem("workout_list", JSON.stringify(workouts));
+            list_workouts();
+        }
+        
+        function skip_workout(index) {
+            workouts[index].completed_seconds = workouts[index].seconds;
+            localStorage.setItem("workout_list", JSON.stringify(workouts));
+            list_workouts();
+        }
+        
+        function hide_end_workout() {
+            document.getElementById("show_end").style.visibility = is_timer_on ? 'visible' : 'hidden';
+        }
+        
+        function list_workouts() {
+            const workoutListElement = document.getElementById("workout");
+            workoutListElement.innerHTML = ''; 
+        
+            workouts.forEach((workout, index) => {
+                const secondsRemaining = parseInt(workout.seconds) - parseInt(workout.completed_seconds);
+                const workoutCard = document.createElement('div');
+                workoutCard.className = 'workout_form';
+        
+                workoutCard.innerHTML = `
+                    <h3 class='workout_name'>${workout.text}</h3>
+                    <p class='workout_time'>${show_time(secondsRemaining)}</p>
+                    <div>
+                        <button type='button' onclick='delete_workout(${index})' class='button'>Delete Workout</button>
+                        <button type='button' onclick='skip_workout(${index})' class='button'>Skip Workout</button>
+                    </div>
+                `;
+                workoutListElement.appendChild(workoutCard);
+            });
+        }
+        
+        function begin_workout() {
+            let index = 0;
+        
+            if (workouts.length === 0) {
+                return;
+            }
+        
+            is_timer_on = true;
+            localStorage.setItem("is_timer_on", true);
+            hide_end_workout();
+        
+            timerInterval = setInterval(() => {
+                if (index >= workouts.length) {
+                    clearInterval(timerInterval);
+                    is_timer_on = false;
+                    localStorage.setItem("is_timer_on", false);
+                    return;
+                }
+        
+                if (parseInt(workouts[index].completed_seconds) >= parseInt(workouts[index].seconds)) {
+                    index++;
+                } else {
+                    workouts[index].completed_seconds = (parseInt(workouts[index].completed_seconds) + 1).toString();
+                    localStorage.setItem("workout_list", JSON.stringify(workouts));
+                    list_workouts();
+                }
+            }, 1000);
+        }
+        
+        function pause_workout() {
+            is_timer_on = false;
+            localStorage.setItem("is_timer_on", false);
+            clearInterval(timerInterval);
+        }
+        
+        function end_workout() {
+            pause_workout();
+            alert("Workout ended. Returning to results page."); 
+        }
+        
+        function show_time(seconds) {
+            const hours = String(Math.floor(seconds / 3600)).padStart(2, '0');
+            const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+            const secs = String(seconds % 60).padStart(2, '0');
+            return `${hours} : ${minutes} : ${secs}`;
+        }
+        (function () {
+            hide_end_workout();
+            list_workouts();
+            if (is_timer_on) {
+                begin_workout();
+            }
+        })();
+        </script>
 </body>
 </html>
