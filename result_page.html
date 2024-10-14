@@ -4,108 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workout Report</title>
+    <title>Document</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <style>
-        * {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            padding: 2rem;
-            background-color: blueviolet;
-            color: white;
-        }
-
-        .report_container {
-            background-color: orange;
-            padding: 1rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-bottom: 2rem;
-        }
-
-        h1, h3 {
-            margin: 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        th, td {
-            border: 1px solid white;
-            padding: 0.5rem;
-            text-align: left;
-        }
-
-        th {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        @media screen and (max-width: 600px) {
-            th, td {
-                font-size: 0.9rem; /* Smaller font size on mobile */
-            }
-        }
-    </style>
 </head>
-
 <body>
     <div class="report_container">
         <h1>Workout Completed</h1>
     </div>
     <div class="report_container">
-        <h3>Your Progress Report!</h3>
+        <h3>Your progess report!!!</h3>
     </div>
-    <table id="table_record" class="table_style">
-        <thead>
-            <tr>
-                <th>Workout Name</th>
-                <th>Actual Time</th>
-                <th>Total Time</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-
-    <script>
-        var workouts = JSON.parse(localStorage.getItem("workout_list")) || [];
-
-        function data_workouts() {
-            var table_data = "";
-            for (var i = 0; i < workouts.length; i++) {
-                var seconds = parseInt(workouts[i].seconds);
-                var completed_seconds = parseInt(workouts[i].completed_seconds);
-
-                if (workouts[i].text !== "Rest") {
-                    table_data += "<tr>";
-                    table_data += "<td>" + workouts[i].text + "</td>";
-                    table_data += "<td>" + show_time(completed_seconds) + "</td>";
-                    table_data += "<td>" + show_time(seconds) + "</td>";
-                    table_data += "</tr>";
-                }
-            }
-
-            document.querySelector("#table_record tbody").innerHTML = table_data;
-        }
-
-        function show_time(seconds) {
-            let hours = Math.floor(seconds / 3600);
-            let mins = Math.floor((seconds % 3600) / 60);
-            let secs = seconds % 60;
-
-            return `${String(hours).padStart(2, '0')} : ${String(mins).padStart(2, '0')} : ${String(secs).padStart(2, '0')}`;
-        }
-
-        (function () {
-            data_workouts();
-        })();
-    </script>
+    <table id="table_record" class="table_style"></table>
+    <script src="result.js"></script>
+</body>
 </body>
 
 </html>
